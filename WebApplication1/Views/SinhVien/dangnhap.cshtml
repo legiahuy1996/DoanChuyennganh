@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewBag.Title = "dangnhap";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<table border="0" cellpadding="5" cellspacing="0" align="center">
+    <tbody>
+        <tr>
+            <td colspan="1">
+                <img src="./signin_files/logo.gif.png">
+            </td>
+        </tr>
+    
+
+        <tr>
+            <td>
+                <table align="center" cellpadding="1">
+                    <tbody>
+                        <tr>
+                            <th colspan="2">SINH VIÊN ĐĂNG NHẬP</th>
+                        </tr>
+                     @using (Html.BeginForm("dangnhap", "SinhVien", FormMethod.Post))
+                       {
+                        <tr>
+                            <td>MSSV:</td>
+                            <td>
+                                <input name="MSSV" id="MSSV" maxlength="10"><br>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Mật khẩu:</td>
+                            <td>
+                                <input type="password" name="password" id="matkhau" maxlength="16">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center"><button type="submit">Đăng nhập</button> </td>
+                        </tr>
+                       }
+                       
+                        
+                       
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="scroll">
+                    <p><strong>Một số hướng dẫn cần thiết :</strong></p>
+                    <ol>
+                        <li>
+                            Đối tượng sử dụng : Sinh viên hệ chính quy tập trung gồm liên thông đại học, đại học, cao đẳng và trung cấp;<br>
+                            (Các trường hợp không đóng học phí đúng thời gian qui định, sinh viên sẽ không xem được điểm)
+                        </li>
+                        <li>Website : <strong><a href="http://stu.edu.vn/">http://stu.edu.vn</a> chuyên mục&nbsp;"Tra&nbsp;cứu&nbsp;điểm"</strong></li>
+                        <li>Sinh viên đăng nhập vào hệ thống bằng mã số sinh viên;</li>
+                        <li>Mật khẩu mặc định là mã số sinh viên.</li>
+                        <li>
+                            Khi truy cập lần thứ nhất, sinh viên lưu ý :
+                            <ul>
+                                <li>Phải thay đổi mật khẩu;</li>
+                                <li>Phải nhập địa chỉ email của cá nhân. Địa chỉ email này được hệ thống sử dụng để gửi thông báo mật khẩu mới khi sinh viên quên mật khẩu của mình (<em>sinh viên chỉ nhận được thư báo mật khẩu&nbsp;một lần trong ngày</em>).</li>
+                            </ul>
+                        </li>
+                        <li>Chương trình Tra cứu điểm sẽ được tạm dừng để bảo trì và cập nhật điểm vào ngày Thứ Sáu hàng tuần. Mở lại vào sáng Thứ Hai.</li>
+                        <li>Trong quá trình truy cập, nếu có thắc mắc gì&nbsp;sinh viên liên hệ Phòng Đào tạo qua địa chỉ email <a href="mailto:pdaotao_stu@yahoo.com">pdaotao_stu@yahoo.com</a>.vn</li>
+                    </ol>
+                </div>&nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1" bgcolor="#336699" align="center" style="color:white">
+                Copyright © 2010  - 2017 Saigon Technology University <br>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+

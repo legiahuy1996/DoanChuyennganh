@@ -1,0 +1,53 @@
+﻿
+
+@using WebApplication1.Models.EF
+@model List<diem>
+<h2>success</h2>
+    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                    <thead>
+                        <tr>
+                            <th>Mã điểm</th>
+                            <th>Điểm Quá Trình</th>
+                            <th>Điểm Giữa Kỳ</th>
+                            <th>Điểm Cuối Kỳ</th>
+                            <th>% Điểm QT</th>
+                            <th>% Điểm GK</th>
+                            <th>% Điểm CK</th>
+                            <th>Mã Học Kỳ</th>
+                            <th>Số Lần Thi</th>
+
+                            <th>Mã môn học</th>
+                            <th>Tổng kết</th>
+                            <th>Thao tác</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (diem diem in Model)
+                        {
+
+
+                            <tr class="odd gradeX">
+
+                                <td class="center">@diem.madiem</td>
+                                <td class="center">@diem.diemQT</td>
+                                <td class="center">@diem.diemGK</td>
+                                <td class="center">@diem.diemCK</td>
+                                <td class="center">@diem.C_diemQT</td>
+                                <td class="center">@diem.C_diemGK</td>
+                                <td class="center">@diem.C_diemck</td>
+                                <td class="center">@diem.mahk</td>
+                                <td class="center">@diem.solanthi</td>
+                                <td class="center">@diem.mamh</td>
+                                <td class="center">@diem.tongdiem</td>
+                                <td class="center">
+                                    <a href="@Url.Action("Deletediem","PDT",new {@msdiem = diem.madiem } )">Xoá</a>
+                                    <a href="@Url.Action("Editdiem","PDT",new {@msdiem = diem.madiem } )"> Sửa</a>
+                                </td>
+
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>

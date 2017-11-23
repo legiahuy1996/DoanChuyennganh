@@ -1,0 +1,65 @@
+﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<html data-sbro-popup-lock="true" data-sbro-ads-lock="true" data-sbro-deals-lock="true" data-sbro-extensions-lock="true">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+    ﻿﻿<table border="0" cellpadding="5" cellspacing="0" align="center" width="700">
+        <tbody>
+            <tr>
+                <td colspan="2">
+                    <img src="~/Assets/Image/logo.gif.png">
+                    
+                </td>
+                
+                
+            </tr>
+            <tr>
+                <td >
+                    <a href="@Url.Action("Index","PDT")" class="btn btn-primary" style="margin-left:40%">Khu vực quản trị viên</a>
+                </td>
+            </tr>
+            @RenderSection("menu", required: false)
+          
+        </tbody>
+    </table>
+    @RenderBody()
+    <table align="center" border="1" cellspacing="0" cellpadding="3" id="bangdiem_hctc">
+        @RenderSection("tablehead", required: false)
+        
+         @RenderSection("table", required: false)
+       
+        
+        <tbody></tbody>
+        </table>
+
+
+        <div id="ketqua"></div>
+        <style>
+            #bangdiem {
+                border: 1px solid black;
+                margin-left: 10%;
+                text-align: center;
+            }
+
+                #bangdiem td {
+                    padding: 20px;
+                    border: 1px solid black;
+                }
+
+            #menutable {
+                background-color: #336699;
+            }
+
+                #menutable a {
+                    text-decoration: none;
+                    color: white;
+                }
+
+                    #menutable a:hover {
+                        -webkit-transition: all .5s ease-out;
+                    }
+        </style>
+</body>
+</html>

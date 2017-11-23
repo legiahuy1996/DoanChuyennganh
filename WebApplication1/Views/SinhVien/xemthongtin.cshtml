@@ -1,0 +1,94 @@
+﻿@using WebApplication1.Models.DAO;
+@using WebApplication1.Models.EF;
+@model sinhvien
+@{
+    ViewBag.Title = "xemthongtin";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+@section menu{
+    <tr id="menutable">
+        <td style="color:white">@Ajax.ActionLink("Bảng điểm", "Index", "Home", new { mssv = Model.mssv }, new AjaxOptions { HttpMethod = "POST" })</td>
+        <td style="color:white">@Ajax.ActionLink("Xem Thông Tin", "xemthongtin", "SinhVien", new { mssv = Model.mssv }, new AjaxOptions { HttpMethod = "POST" })</td>
+        <td style="color:white" colspan="2"><a href="@Url.Action("Dangxuat","SinhVien")">Đăng xuất </a></td>
+
+    </tr>
+
+
+}
+<table border="0" cellpadding="5" cellspacing="0" align="center">
+    <tbody>
+       
+        <tr>
+           
+       
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table align="center">
+                    <tbody>
+                        <h1>@ViewBag.ThongBao</h1>
+                        @using (Html.BeginForm("doimatkhau", "SinhVien",new {mssv = Model.mssv } ,FormMethod.Post))
+                        {
+                            <tr>
+                                <th colspan="2">THÔNG TIN TÀI KHOẢN</th>
+                            </tr>
+                            <tr>
+                                <td><b>Mật khẩu:</b></td>
+                                <td><input type="password" name="oldpass" maxlength="16" min="6" required></td>
+                            </tr>
+                            <tr><td colspan="2">&nbsp;</td></tr>
+                            <tr>
+                                <th colspan="2">ĐỔI MẬT KHẨU</th>
+                            </tr>
+                            <tr>
+                                <td>Mật khẩu mới:</td>
+                                <td><input type="password" name="newpass" maxlength="16"></td>
+                            </tr>
+                            <tr>
+                                <td>Nhập lại:</td>
+                                <td><input type="password" name="newpass1" maxlength="16"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center"><button type="submit">Đổi mật khẩu</button></td>
+                            </tr>
+                        }
+
+
+                      
+                        <tr>
+                            <td colspan="2" align="center" style="color:#666666;"><span id="status" style="display: none;"></span></td>
+                        </tr>
+                        <tr><td colspan="2">&nbsp;</td></tr>
+                        <tr>
+
+                            <th colspan="2">THAY ĐỔI EMAIL</th>
+                        </tr>
+                        <tr>
+                            <td>Email hiện hành:</td>
+                            <td><b style="color:green"><span id="email_hienhanh">@Model.email</span></b><input type="hidden" id="oldemail" value="legiahuy1996@outlook.com"></td>
+                        </tr>
+                        <tr>
+                            <td>Email mới:</td>
+                            <td><input id="email" maxlength="50"><br><span id="email_err" class="err" style="display: none;"></span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center"><input type="button" id="submit1" value="Thay đổi email"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center" style="color:#666666;"><span id="status1" style="display: none;"></span></td>
+                        </tr>
+                    </tbody>
+                    
+                  
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" bgcolor="#336699" align="center" style="color:white">
+                Copyright © 2010  - 2017 Saigon Technology University <br>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+

@@ -2,7 +2,7 @@
 @using WebApplication1.Models.EF;
 @model sinhvien
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "xemtatcadiem";
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 @section menu{
@@ -11,14 +11,12 @@
         <td style="color:white">@Ajax.ActionLink("Xem Thông Tin", "xemthongtin", "SinhVien", new { mssv = Model.mssv }, new AjaxOptions { HttpMethod = "POST" })</td>
         <td style="color:white" colspan="2"><a href="@Url.Action("Dangxuat","SinhVien")">Đăng xuất </a></td>
 
-
-
     </tr>
 
 
 }
 @section tablehead{
-
+    
     <thead>
         <tr>
             <td align="center" colspan="13">
@@ -63,7 +61,6 @@
 }
 <table align="center" border="0" cellspacing="0" cellpadding="3">
     <tbody>
-
         <tr>
             <th colspan="2">THÔNG TIN SINH VIÊN</th>
         </tr>
@@ -79,24 +76,38 @@
             <td>Lớp</td>
             <td>:@Model.lop</td>
         </tr>
-        <tr>
-            <td>
-                @Ajax.ActionLink("Xem Điểm", "xemtatcadiem", "SinhVien", new { mssv = @Model.mssv }, new AjaxOptions { HttpMethod = "POST" }, new { @id = "btnXemDiem" })
-            </td>
-        </tr>
+        <tr></tr>
     </tbody>
 </table>
-<style>
-    #btnXemDiem {
-        text-decoration: none;
-        background-color: #336699;
-        color: white;
-        padding: 5px;
+@section table{
+
+    @foreach (diem diem in ViewBag.Diem)
+    {
+        monhoc mh = MonHocDao.Instance.getmonhocbyID(diem.mamh);
+
+        <tr style="text-align:center">
+            <td>@diem.mahk</td>
+            <td>@diem.mamh</td>
+            <td>@mh.tenmh</td>
+
+
+
+            <td>@diem.diemQT</td>
+            <td>@diem.diemGK</td>
+            <td>@diem.diemCK</td>
+
+
+
+            <td>@diem.solanthi</td>
+            <td>@diem.tongdiem</td>
+
+
+
+        </tr>
+
     }
 
-        #btnXemDiem:hover {
-            -webkit-transition: all .5s ease-out;
-        }
-</style>
+}
+
 
 

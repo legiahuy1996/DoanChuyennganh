@@ -1,0 +1,138 @@
+﻿
+@{
+    ViewBag.Title = "Score";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+@using WebApplication1.Models.EF;
+@model List<nhom>
+@if (Session["ErrorMess"] != null)
+{
+    if (string.Compare(Session["ErrorMess"].ToString(), "Success!") == 0)
+    {
+        <div class="success">@Session["ErrorMess"]</div>
+    }
+    else
+    {
+        <div class="alert alert-danger">@Session["ErrorMess"]</div>
+    }
+
+
+
+}
+
+
+@using (Html.BeginForm("UploadFileDiem", "PDT", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+    <div class="form-group">
+
+        <div class="control-label col-md-2">Excel:</div>
+        <div class="col-md-10">
+            <input type="file" id="FileUpload" name="FileUpload" class="" />
+        </div>
+    </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Upload" id="btnSubmit" class="btn btn-primary" />
+
+                    </div>
+                </div>
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+               
+                <a href="@Url.Action("Insertdiem","PDT")"> <input type="button" value="Create New Bảng điểm" /></a>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+       
+                <!-- /.table-responsive -->
+               
+                <p>
+                  @using (Ajax.BeginForm("XemDiem", "PDT", new AjaxOptions { UpdateTargetId = "resultaa", OnBegin = "", InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "", LoadingElementId = "loadingElement2", }))
+                  {
+                   
+                        <div>Tên môn học:<select id="tenmonhoc" name="tenmh" onchange="getnhom(this.value)">
+                            @foreach (monhoc mh in ViewBag.Monhoc)
+{
+                                <option value="@mh.tenmh">@mh.tenmh</option>
+                            }
+                              
+                              </select></div>
+                            <div>
+                                <br>
+                                Tên nhóm: <input  type="text" name="tennhom" />
+                                   
+
+                               
+                            </div>
+                        <br>
+                        <span>Học kỳ: <input type="number" min="1" max="3" step="1" name="hocky" /> Năm: <input type="number" min="2014" step="1" name="nam" /><input type="submit" id="submit"value="Xem điểm" /></span>
+                        
+                   }
+
+      
+                        @*Product List Display Here*@
+                        <div id="loadingElement2" style="display:none; color:#f60">
+                            Loading products...
+                        </div>
+
+                        <div id="resultaa"></div>
+
+
+                        @if (Session["ThongBao"] != null)
+                {
+                    if (string.Compare(Session["ThongBao"].ToString(), "Thêm thành công") == 0)
+                    {
+                                <script language="javascript">
+                                    alert("Thêm thành công!!!!");
+                                </script>
+                                Session["ThongBao"] = null;
+                            }
+                            else if (string.Compare(Session["ThongBao"].ToString(), "Xoá Thành Công") == 0)
+                            {
+                                <script language="javascript">
+                                    alert("Xoá thành công!!!!");
+                                </script>
+                                Session["ThongBao"] = null;
+                            }
+                            else if (string.Compare(Session["ThongBao"].ToString(), "Xoá Không Thành Công") == 0)
+                            {
+                                <script language="javascript">
+                                    alert("Xoá Không Thành Công!!!!");
+                                </script>
+                                Session["ThongBao"] = null;
+                            }
+                            else if (string.Compare(Session["ThongBao"].ToString(), "Sửa Thành Công") == 0)
+                            {
+                                <script language="javascript">
+                                    alert("Sửa Thành Công!!!!");
+                                </script>
+                                Session["ThongBao"] = null;
+                            }
+
+
+
+
+
+                        }
+
+
+
+
+
+                    </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+
+
+
+
+
+
