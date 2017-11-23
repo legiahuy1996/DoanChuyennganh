@@ -21,33 +21,42 @@
 }
 
 
-@using (Html.BeginForm("UploadFileDiem", "PDT", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-    <div class="form-group">
 
-        <div class="control-label col-md-2">Excel:</div>
-        <div class="col-md-10">
-            <input type="file" id="FileUpload" name="FileUpload" class="" />
-        </div>
-    </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Upload" id="btnSubmit" class="btn btn-primary" />
-
-                    </div>
-                </div>
-}
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel panel-heading">
-                <h1>Quản lý điểm</h1>
+                <h3>Quản lý điểm</h3>
+                
+
+
+            </div>
+            <div class="panel panel-collapse">
+             
+                    @using (Html.BeginForm("UploadFileDiem", "PDT", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                        <div class="form-group">
+
+                            <div class="control-label col-md-2">Import file Excel:</div>
+                            <div class="col-md-10">
+                                <input type="file" id="FileUpload" name="FileUpload" class="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Upload" id="btnSubmit" class="btn btn-primary" />
+
+                            </div>
+                        </div>
+
+                    }
+                
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-       
+              
                 <!-- /.table-responsive -->
-               
+                <hr />
                 <p>
                   @using (Ajax.BeginForm("XemDiem", "PDT", new AjaxOptions { UpdateTargetId = "resultaa", OnBegin = "", InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "", LoadingElementId = "loadingElement2", }))
                   {
