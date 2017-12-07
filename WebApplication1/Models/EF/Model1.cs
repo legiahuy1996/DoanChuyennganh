@@ -1,4 +1,4 @@
- namespace WebApplication1.Models.EF
+namespace WebApplication1.Models.EF
 {
     using System;
     using System.Data.Entity;
@@ -110,6 +110,10 @@
 
             modelBuilder.Entity<sinhvien>()
                 .Property(e => e.mssv)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<sinhvien>()
+                .Property(e => e.sdt)
                 .IsUnicode(false);
 
             modelBuilder.Entity<sinhvien>()

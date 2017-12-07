@@ -20,7 +20,8 @@ namespace WebApplication1.Models.EF
 
         public bool? gioitinh { get; set; }
 
-        public int? sdt { get; set; }
+        [StringLength(11)]
+        public string sdt { get; set; }
 
         [StringLength(50)]
         public string email { get; set; }

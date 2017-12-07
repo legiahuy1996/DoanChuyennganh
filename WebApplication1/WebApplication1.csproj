@@ -378,12 +378,13 @@
     <Content Include="Views\PDT\EditSV.cshtml" />
     <Content Include="Views\PDT\Index.cshtml" />
     <Content Include="Views\PDT\Insertdiem.cshtml" />
-    <Content Include="Views\PDT\Login.cshtml" />
     <Content Include="Views\PDT\Score.cshtml" />
     <Content Include="Views\PDT\success.cshtml" />
     <Content Include="Views\PDT\Uploadfile.cshtml" />
     <Content Include="Views\PDT\Xemdiem.cshtml" />
     <Content Include="Views\PDT\xemmonhoc.cshtml" />
+    <Content Include="Views\PDT\Nhom.cshtml" />
+    <Content Include="Views\PDT\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

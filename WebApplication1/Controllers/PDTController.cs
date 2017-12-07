@@ -7,7 +7,7 @@ using WebApplication1.Models.DAO;
 using WebApplication1.Models.EF;
 using System.IO;
 using Excel = Microsoft.Office.Interop.Excel;
-
+using System.Globalization;
 
 namespace WebApplication1.Controllers
 {
@@ -52,64 +52,77 @@ namespace WebApplication1.Controllers
         }
         #endregion
         #region Bảng SV
-        [HttpGet]
-        public ActionResult InsertSV()
-        {
-            //if (Session["taikhoanadmin"] == null)
-            //    return RedirectToAction("Login", "PDT");
-            //else
-            return View();
-        }
         [HttpPost]
-        public ActionResult InsertSV(sinhvien sv, string ngaysinh, string email, string gioitinh)
+        public ActionResult UploadFileSinhvien(HttpPostedFileBase FileUpload)
         {
-            string str, str1;
 
-            List<sinhvien> lst = SinhvienDAO.Instance.GetNewestSV();
-            foreach (sinhvien sinhvienmoinhat in lst)
+            if (FileUpload == null || FileUpload.ContentLength == 0)
             {
-                str = sinhvienmoinhat.mssv;
-                str1 = str.Substring(0, 2);
-                int str2 = int.Parse(str.Substring(2));
-                str2++;
-                sv.mssv = str1 + str2.ToString();
-
-            }
-
-
-            if (ngaysinh != "")
-                sv.ngaysinh = DateTime.Parse(ngaysinh);
-            if (email != "")
-                sv.email = email;
-            if (gioitinh != null)
-            {
-                if (gioitinh == "Nam")
-                    sv.gioitinh = true;
-                else
-                    sv.gioitinh = false;
-            }
-            SinhvienDAO.Instance.Insert(sv);
-            Session["ThongBao"] = "Thêm thành công";
-            return RedirectToAction("Index", "PDT");
-        }
-
-        public ActionResult DeleteSV(string mssv)
-        {
-            var result = SinhvienDAO.Instance.Delete(mssv);
-            if (result)
-            {
-                Session["ThongBao"] = "Xoá Thành Công";
-                return RedirectToAction("Index", "PDT");
+                Session["ErrorMess"] = "Please select a excel file<br>";
+                return RedirectToAction("Score", "PDT");
             }
             else
             {
-                Session["ThongBao"] = "Xoá Không Thành Công";
-                return RedirectToAction("Index", "PDT");
+                if (FileUpload.FileName.EndsWith("xls") || (FileUpload.FileName.EndsWith("xlsx")))
+                {
+                    string location = Server.MapPath("~/Content/" + FileUpload.FileName);
+                    if (System.IO.File.Exists(location))
+                        System.IO.File.Delete(location);
+                    FileUpload.SaveAs(location);
+                    //Read data from excel
+                    Excel.Application application = new Excel.Application();
+                    Excel.Workbook workbook = application.Workbooks.Open(location);
+                    Excel.Worksheet worksheet = workbook.ActiveSheet;
+                    Excel.Range range = worksheet.UsedRange;
+                    for (int row = 2; row <= range.Rows.Count; row++)
+                    {
+                        sinhvien sv = new sinhvien();
+                        sv.mssv = ((Excel.Range)range.Cells[row, 1]).Text;
+                        sv.hoten = ((Excel.Range)range.Cells[row, 2]).Text;
+                        DateTime dtDOB = DateTime.ParseExact(((Excel.Range)range.Cells[row, 4]).Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        sv.ngaysinh = dtDOB;
+                        sv.diachi = ((Excel.Range)range.Cells[row, 5]).Text;
+                        sv.sdt = ((Excel.Range)range.Cells[row, 6]).Text;
+                        sv.email = ((Excel.Range)range.Cells[row, 7]).Text;
+                        sv.matkhau = ((Excel.Range)range.Cells[row, 8]).Text;
+                        sv.lop = ((Excel.Range)range.Cells[row, 9]).Text;
+                        sv.makhoa = ((Excel.Range)range.Cells[row, 10]).Text;
+                        sv.gioitinh = Boolean.Parse(((Excel.Range)range.Cells[row, 11]).Text);
+
+                        db.sinhviens.Add(sv);
+                        db.SaveChanges();
+                    }
+                    var lst = db.diems.ToList();
+                    Session["ErrorMess"] = "Success!";
+                    return RedirectToAction("Index", "PDT");
+
+
+
+                }
+                else
+                {
+                    Session["ErrorMess"] = "File type is incorrect<br>";
+                    return RedirectToAction("Index", "PDT");
+                }
+            }
+        }
+            public ActionResult DeleteSV(string mssv)
+            {
+                var result = SinhvienDAO.Instance.Delete(mssv);
+                if (result)
+                {
+                    Session["ThongBao"] = "Xoá Thành Công";
+                    return RedirectToAction("Index", "PDT");
+                }
+                else
+                {
+                    Session["ThongBao"] = "Xoá Không Thành Công";
+                    return RedirectToAction("Index", "PDT");
+
+                }
+
 
             }
-
-
-        }
         [HttpGet]
         public ActionResult EditSV(string mssv)
         {
@@ -267,11 +280,6 @@ namespace WebApplication1.Controllers
 
 
 
-        public ActionResult GetNhom(string mamh)
-        {
-            nhom n = db.nhoms.SingleOrDefault(x => x.mamh == mamh);
-            return Json(n, JsonRequestBehavior.AllowGet);
-        }
 
 
     }

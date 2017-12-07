@@ -1,0 +1,9 @@
+﻿@using WebApplication1.Models.EF;
+@model List<nhom>
+    @foreach (nhom n in Model)
+    {
+        <select id="tennhom">
+            <option value="@n.tennhom">@n.tennhom</option>
+        </select>
+        
+    }

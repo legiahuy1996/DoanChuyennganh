@@ -4,6 +4,21 @@
     Layout = "~/Views/Shared/LayoutAdmin.cshtml";
 }
 
+@if (Session["ErrorMess"] != null)
+{
+    if (string.Compare(Session["ErrorMess"].ToString(), "Success!") == 0)
+    {
+        <div class="success">@Session["ErrorMess"]</div>
+    }
+    else
+    {
+        <div class="alert alert-danger">@Session["ErrorMess"]</div>
+    }
+
+
+
+}
+
 @using WebApplication1.Models.EF;
 @model List<sinhvien>
 <div class="row">
@@ -11,10 +26,31 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h1 class="page-header">Thông Tin Sinh Viên</h1>
-                <a href="@Url.Action("InsertSV","PDT")"> <input type="button" value="Create New Sinh Viên" /></a>
+               
 
             </div>
-          
+            <div class="panel panel-collapse">
+
+                @using (Html.BeginForm("UploadFileSinhvien", "PDT", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                    <div class="form-group">
+
+                        <div class="control-label col-md-2">Import file Sinh Viên:</div>
+                        <div class="col-md-10">
+                            <input type="file" id="FileUpload" name="FileUpload" class="" />
+                        </div>
+                    </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Upload" id="btnSubmit" class="btn btn-primary" />
+
+                            </div>
+                        </div>
+
+                }
+
+            </div>
+
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
