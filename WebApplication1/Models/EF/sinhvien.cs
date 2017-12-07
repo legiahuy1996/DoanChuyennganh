@@ -13,6 +13,7 @@ namespace WebApplication1.Models.EF
         [StringLength(50)]
         public string mssv { get; set; }
 
+        [Column(TypeName = "date")]
         public DateTime? ngaysinh { get; set; }
 
         [StringLength(50)]

@@ -87,7 +87,7 @@ namespace WebApplication1.Models.DAO
                     sv1.ngaysinh = sv.ngaysinh;
                     sv1.sdt = sv.sdt;
 
-
+              
 
 
                     db.SaveChanges();

@@ -20,10 +20,10 @@
                    grid.Column("DiemCK",  "Điểm cuối kì", canSort: false, format: @<text>  <span class="display-mode"studentId ="@item.Madiem"> <label id="lbldiemck_@item.Madiem">@item.DiemCK</label> </span> <input studentId ="@item.Madiem" type="number" id="diemck_@item.Madiem" value="@item.DiemCK" class="edit-mode" /></text>, style: "col2Width"),
                    grid.Column("Tongdiem",  "Tổng kết", canSort: false),
                    grid.Column("Action", format: @<text>
-                    <button class="edit-user display-mode"  studentId ="@item.Madiem" value="@item.Madiem">edit</button>
-            <button class="delete-user display-mode " studentId="@item.Madiem" value="@item.Madiem">Xoá</button>
-                    <button class="save-user edit-mode" studentId ="@item.Madiem">save</button>
-                    <button class="cancel-user edit-mode" studentId ="@item.Madiem">cancel</button> @*<input type="button" value="edit" class="edit-user display-mode" /> <input type="button" value="save" class="save-user edit-mode" /><input type="button" value="cancel" class="cancel-user edit-mode" />*@
+                    <button class="edit-user display-mode btn btn-warning"  studentId ="@item.Madiem" value="@item.Madiem">edit</button>
+            <button class="delete-user display-mode btn btn-danger " studentId="@item.Madiem" value="@item.Madiem">Xoá</button>
+                    <button class="save-user edit-mode btn btn-primary" studentId ="@item.Madiem">save</button>
+                    <button class="cancel-user edit-mode btn btn-danger" studentId ="@item.Madiem">cancel</button> @*<input type="button" value="edit" class="edit-user display-mode" /> <input type="button" value="save" class="save-user edit-mode" /><input type="button" value="cancel" class="cancel-user edit-mode" />*@
                 </text>, style: "col3width") 
 
            ))

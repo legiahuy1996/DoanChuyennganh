@@ -290,6 +290,21 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Models\EF\Scripts\bootstrap.js" />
+    <Content Include="Models\EF\Scripts\bootstrap.min.js" />
+    <None Include="Models\EF\Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Models\EF\Scripts\jquery-1.10.2.js" />
+    <Content Include="Models\EF\Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Models\EF\Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Models\EF\Scripts\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Models\EF\Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Models\EF\Scripts\jquery.validate.js" />
+    <Content Include="Models\EF\Scripts\jquery.validate.min.js" />
+    <Content Include="Models\EF\Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Models\EF\Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Models\EF\Scripts\modernizr-2.6.2.js" />
+    <Content Include="Models\EF\Scripts\respond.js" />
+    <Content Include="Models\EF\Scripts\respond.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -344,6 +359,14 @@
     <Content Include="Assets\vendor\font-awesome\scss\_spinning.scss" />
     <Content Include="Assets\vendor\font-awesome\scss\_stacked.scss" />
     <Content Include="Assets\vendor\font-awesome\scss\_variables.scss" />
+    <Content Include="Models\EF\Web.config" />
+    <None Include="Models\EF\Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Models\EF\Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <Content Include="Models\EF\Scripts\jquery-1.10.2.min.map" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

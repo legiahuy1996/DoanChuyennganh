@@ -8,7 +8,7 @@
 {
     if (string.Compare(Session["ErrorMess"].ToString(), "Success!") == 0)
     {
-        <div class="success">@Session["ErrorMess"]</div>
+        <div class="alert-success">@Session["ErrorMess"]</div>
     }
     else
     {
@@ -95,8 +95,8 @@
                                 <td class="center">@sv.lop</td>
                                 <td class="center">@sv.makhoa</td>
                                 <td class="center">@sv.madk</td>
-                                <td class="center"><a href="@Url.Action("DeleteSV","PDT",new {@mssv = sv.mssv } )" >Xoá</a>
-                                <a href="@Url.Action("EditSV","PDT",new {@mssv = sv.mssv } )"> Sửa</a></td>
+                                <td class="center"><a class="btn btn-danger" href="@Url.Action("DeleteSV","PDT",new {@mssv = sv.mssv } )" >Xoá</a>
+                                <a class="btn btn-warning" href="@Url.Action("EditSV","PDT",new {@mssv = sv.mssv } )"> Sửa</a></td>
 
                             </tr>
                         }

@@ -76,10 +76,11 @@ namespace WebApplication1.Controllers
                     Excel.Range range = worksheet.UsedRange;
                     for (int row = 2; row <= range.Rows.Count; row++)
                     {
+                        DateTime dtDOB = new DateTime();
                         sinhvien sv = new sinhvien();
                         sv.mssv = ((Excel.Range)range.Cells[row, 1]).Text;
                         sv.hoten = ((Excel.Range)range.Cells[row, 2]).Text;
-                        DateTime dtDOB = DateTime.ParseExact(((Excel.Range)range.Cells[row, 4]).Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                       dtDOB = DateTime.ParseExact(((Excel.Range)range.Cells[row, 4]).Text, "d/M/yyyy", CultureInfo.InvariantCulture);
                         sv.ngaysinh = dtDOB;
                         sv.diachi = ((Excel.Range)range.Cells[row, 5]).Text;
                         sv.sdt = ((Excel.Range)range.Cells[row, 6]).Text;
@@ -88,10 +89,20 @@ namespace WebApplication1.Controllers
                         sv.lop = ((Excel.Range)range.Cells[row, 9]).Text;
                         sv.makhoa = ((Excel.Range)range.Cells[row, 10]).Text;
                         sv.gioitinh = Boolean.Parse(((Excel.Range)range.Cells[row, 11]).Text);
-
-                        db.sinhviens.Add(sv);
-                        db.SaveChanges();
+                        var kiemtratrung = SinhvienDAO.Instance.GetSVByMSSV(sv.mssv);
+                        if (kiemtratrung!=null)
+                        {
+                            Session["ErrorMess"] = "Đã có sv!";
+                            return RedirectToAction("Index", "PDT");
+                        }
+                        else
+                        {
+                            db.sinhviens.Add(sv);
+                            db.SaveChanges();
+                        }
+                       
                     }
+                    application.Workbooks.Close();
                     var lst = db.diems.ToList();
                     Session["ErrorMess"] = "Success!";
                     return RedirectToAction("Index", "PDT");
@@ -127,21 +138,23 @@ namespace WebApplication1.Controllers
         public ActionResult EditSV(string mssv)
         {
             sinhvien sv = SinhvienDAO.Instance.GetSVByMSSV(mssv);
+            
             return View(sv);
         }
         [HttpPost]
         public ActionResult EditSV(sinhvien sv, string gioitinh, string ngaysinh)
         {
+            sinhvien svcu = SinhvienDAO.Instance.GetSVByMSSV(sv.mssv);
             if (ngaysinh != "")
-                sv.ngaysinh = DateTime.Parse(ngaysinh);
+                svcu.ngaysinh = DateTime.Parse(ngaysinh);
             if (gioitinh != null)
             {
                 if (gioitinh == "Nam")
-                    sv.gioitinh = true;
+                    svcu.gioitinh = true;
                 else
-                    sv.gioitinh = false;
+                    svcu.gioitinh = false;
             }
-            SinhvienDAO.Instance.Edit(sv);
+            SinhvienDAO.Instance.Edit(svcu);
             Session["ThongBao"] = "Sửa Thành Công";
             return RedirectToAction("Index", "PDT");
 
