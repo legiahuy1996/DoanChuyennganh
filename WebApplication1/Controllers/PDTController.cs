@@ -22,7 +22,7 @@ namespace WebApplication1.Controllers
             else
             {
                 var list = SinhvienDAO.Instance.GetListSV();
-            return View(list);
+                return View(list);
             }
         }
         #region Login
@@ -34,7 +34,8 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public ActionResult Login(string msnv, string password)
         {
-            var result = PDTdao.Instance.login(msnv, password);
+
+            var result = PDTdao.Instance.login(msnv, Encryptor.MD5Hash(password));
             if (result)
             {
                 var nhanvien = PDTdao.Instance.getNhanVienByID(msnv);
@@ -80,7 +81,7 @@ namespace WebApplication1.Controllers
                         sinhvien sv = new sinhvien();
                         sv.mssv = ((Excel.Range)range.Cells[row, 1]).Text;
                         sv.hoten = ((Excel.Range)range.Cells[row, 2]).Text;
-                       dtDOB = DateTime.ParseExact(((Excel.Range)range.Cells[row, 4]).Text, "d/M/yyyy", CultureInfo.InvariantCulture);
+                        dtDOB = DateTime.ParseExact(((Excel.Range)range.Cells[row, 4]).Text, "d/M/yyyy", CultureInfo.InvariantCulture);
                         sv.ngaysinh = dtDOB;
                         sv.diachi = ((Excel.Range)range.Cells[row, 5]).Text;
                         sv.sdt = ((Excel.Range)range.Cells[row, 6]).Text;
@@ -90,7 +91,7 @@ namespace WebApplication1.Controllers
                         sv.makhoa = ((Excel.Range)range.Cells[row, 10]).Text;
                         sv.gioitinh = Boolean.Parse(((Excel.Range)range.Cells[row, 11]).Text);
                         var kiemtratrung = SinhvienDAO.Instance.GetSVByMSSV(sv.mssv);
-                        if (kiemtratrung!=null)
+                        if (kiemtratrung != null)
                         {
                             Session["ErrorMess"] = "Đã có sv!";
                             return RedirectToAction("Index", "PDT");
@@ -100,7 +101,7 @@ namespace WebApplication1.Controllers
                             db.sinhviens.Add(sv);
                             db.SaveChanges();
                         }
-                       
+
                     }
                     application.Workbooks.Close();
                     var lst = db.diems.ToList();
@@ -117,28 +118,28 @@ namespace WebApplication1.Controllers
                 }
             }
         }
-            public ActionResult DeleteSV(string mssv)
+        public ActionResult DeleteSV(string mssv)
+        {
+            var result = SinhvienDAO.Instance.Delete(mssv);
+            if (result)
             {
-                var result = SinhvienDAO.Instance.Delete(mssv);
-                if (result)
-                {
-                    Session["ThongBao"] = "Xoá Thành Công";
-                    return RedirectToAction("Index", "PDT");
-                }
-                else
-                {
-                    Session["ThongBao"] = "Xoá Không Thành Công";
-                    return RedirectToAction("Index", "PDT");
-
-                }
-
+                Session["ThongBao"] = "Xoá Thành Công";
+                return RedirectToAction("Index", "PDT");
+            }
+            else
+            {
+                Session["ThongBao"] = "Xoá Không Thành Công";
+                return RedirectToAction("Index", "PDT");
 
             }
+
+
+        }
         [HttpGet]
         public ActionResult EditSV(string mssv)
         {
             sinhvien sv = SinhvienDAO.Instance.GetSVByMSSV(mssv);
-            
+
             return View(sv);
         }
         [HttpPost]
@@ -264,18 +265,27 @@ namespace WebApplication1.Controllers
         public ActionResult EditDiem(string madiem, double? diemqt, double? diemgk, double? diemck)
         {
 
-            var result = DiemDAO.Instance.edit(madiem, diemqt, diemgk, diemck);
-            if (result)
+            if(diemqt >=0 && diemgk >=0 && diemck >=0)
             {
-                string message = "Thành công!";
-                return Json(message, JsonRequestBehavior.AllowGet);
+                var result = DiemDAO.Instance.edit(madiem, diemqt, diemgk, diemck);
+                if (result)
+                {
+                    string message = "Thành công!";
+                    return Json(message, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    string message = "Không thành công!";
+                    return Json(message, JsonRequestBehavior.AllowGet);
+
+                }
             }
             else
             {
-                string message = "Không thành công!";
+                string message = "Điểm không được là số âm!";
                 return Json(message, JsonRequestBehavior.AllowGet);
-
             }
+            
 
 
         }
@@ -286,6 +296,102 @@ namespace WebApplication1.Controllers
             ViewBag.Monhoc = lstmh;
             return View(lst);
         }
+        #endregion
+        #region Bảng môn học
+        public ActionResult XemMonHoc()
+        {
+            List<monhoc> lst = MonHocDao.Instance.GetList();
+            return View(lst);
+        }
+        [HttpGet]
+        public ActionResult SuaMonHoc(string ma)
+        {
+            monhoc mh = MonHocDao.Instance.getmonhocbyID(ma);
+            return View(mh);
+            
+           
+        }
+        [HttpPost]
+        public ActionResult SuaMonHoc(string ma,string tenmonhoc,int sotc, string makhoa)
+        {
+            monhoc mh = MonHocDao.Instance.getmonhocbyID(ma);
+            var kiemtramakhoa = db.khoas.SingleOrDefault(x => x.makhoa == makhoa);
+            string ten = tenmonhoc.Replace(" ", "");
+            if (sotc > 0 && kiemtramakhoa != null && ten.Length >0) 
+            {
+
+                mh.tenmh = tenmonhoc;
+                mh.sotc = sotc;
+                mh.makhoa = makhoa;
+                db.SaveChanges();
+                Session["ErrorMess"] = "Success!";
+                return RedirectToAction("XemMonHoc");
+            }
+           else
+            {
+                Session["ErrorMess"] = "Sửa không thành công";
+                return RedirectToAction("SuaMonHoc", new { ma });
+            }
+
+
+
+        }
+        public ActionResult XoaMonHoc(string ma)
+        {
+            var result = MonHocDao.Instance.delete(ma);
+            if (result)
+            {
+                Session["ErrorMess"] = "Success!";
+                return RedirectToAction("XemMonHoc");
+            }
+            else
+            {
+                Session["ErrorMess"] = "Xoá không thành công!";
+                return RedirectToAction("XemMonHoc");
+            }
+
+        }
+        [HttpGet]
+        public ActionResult ThemMonHoc()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ThemMonHoc(string tenmonhoc,int sotc,string makhoa)
+        {
+            string mamoi = "";
+            string mamonhocmoinhat = "";
+            string ten = tenmonhoc.Replace(" ", "");
+            var kiemtramakhoa = db.khoas.SingleOrDefault(x => x.makhoa == makhoa);
+            mamonhocmoinhat= MonHocDao.Instance.laymonhocmoinhat();//lấy ra mã môn học mới nhất 
+            //xử lý mã môn học mới nhất, cắt phần số tăng lên 1 sau đó ghép lại với phần chữ
+            string maso = mamonhocmoinhat.Substring(2);
+            int masomoi = int.Parse(maso) +1;
+            if (masomoi < 10)
+                mamoi = "MH00" + masomoi.ToString();
+            else if (masomoi < 100)
+                mamoi = "MH0" + masomoi.ToString();
+            else
+                mamoi = "MH" + masomoi.ToString();
+            //kết thúc xử lý mã mới
+            if (ten.Length > 0 && sotc > 0 && kiemtramakhoa != null)
+            {
+                monhoc mh = new monhoc();
+                mh.mamh = mamoi;
+                mh.tenmh = tenmonhoc;
+                mh.sotc = sotc;
+                mh.makhoa = makhoa;
+                MonHocDao.Instance.insert(mh);
+                Session["ErrorMess"] = "Success!";
+                return RedirectToAction("XemMonHoc");
+            }
+            else
+            {
+                Session["ErrorMess"] = "Thêm không thành công!";
+                return RedirectToAction("ThemMonHoc");
+            }
+        }
+
         #endregion
 
 

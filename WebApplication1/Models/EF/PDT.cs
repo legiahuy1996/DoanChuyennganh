@@ -20,12 +20,13 @@ namespace WebApplication1.Models.EF
         [StringLength(50)]
         public string email { get; set; }
 
-        public int? sdt { get; set; }
+        [StringLength(11)]
+        public string sdt { get; set; }
 
         [StringLength(50)]
         public string diachi { get; set; }
 
-        [StringLength(25)]
+        [StringLength(50)]
         public string matkhau { get; set; }
     }
 }

@@ -19,7 +19,7 @@
                    grid.Column("DiemGK", "Điểm giữa kì", canSort: false, format: @<text>  <span class="display-mode"studentId ="@item.Madiem"> <label id="lbldiemgk_@item.Madiem">@item.DiemGK</label> </span> <input studentId ="@item.Madiem" type="number" id="diemgk_@item.Madiem" value="@item.DiemGK" class="edit-mode" /></text>, style: "col2Width"),
                    grid.Column("DiemCK",  "Điểm cuối kì", canSort: false, format: @<text>  <span class="display-mode"studentId ="@item.Madiem"> <label id="lbldiemck_@item.Madiem">@item.DiemCK</label> </span> <input studentId ="@item.Madiem" type="number" id="diemck_@item.Madiem" value="@item.DiemCK" class="edit-mode" /></text>, style: "col2Width"),
                    grid.Column("Tongdiem",  "Tổng kết", canSort: false),
-                   grid.Column("Action", format: @<text>
+                   grid.Column("Action",canSort:false, format: @<text>
                     <button class="edit-user display-mode btn btn-warning"  studentId ="@item.Madiem" value="@item.Madiem">edit</button>
             <button class="delete-user display-mode btn btn-danger " studentId="@item.Madiem" value="@item.Madiem">Xoá</button>
                     <button class="save-user edit-mode btn btn-primary" studentId ="@item.Madiem">save</button>
@@ -79,11 +79,12 @@
                         data: { madiem, diemqt, diemgk, diemck },
                         method: 'post',
                         success: function (data) {
-                            
+                           
                             $("#submit").click();
-                            alert(data);
+                            
                             $('.edit-mode').hide();
                             $('.display-mode').show();
+                            alert(data);
                             
                         },
                         error: ""

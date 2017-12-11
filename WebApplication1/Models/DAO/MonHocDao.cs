@@ -21,9 +21,40 @@ namespace WebApplication1.Models.DAO
         {
             return db.monhocs.SingleOrDefault(x => x.mamh == ma);
         }
+        public List<monhoc> getlistmonhocbyID(string ma)
+        {
+            return db.monhocs.Where(x => x.mamh == ma).ToList();
+        }
         public List<monhoc> GetList()
         {
             return db.monhocs.ToList();
+        }
+        public bool delete(string ma)
+        {
+            monhoc kq = db.monhocs.SingleOrDefault(x => x.mamh == ma);
+            if (kq != null)
+            {
+                db.monhocs.Remove(kq);
+                db.SaveChanges();
+                return true;
+            }
+            else return false;
+        }
+        public string laymonhocmoinhat()
+        {
+            string mamh="";
+            List<monhoc> lst = db.monhocs.OrderByDescending(x=>x.mamh).ToList();
+            foreach(monhoc mh in lst)
+            {
+                 mamh = mh.mamh;
+                break;
+            }
+            return mamh;
+        }
+        public void insert(monhoc mh)
+        {
+            db.monhocs.Add(mh);
+            db.SaveChanges();
         }
     }
 }

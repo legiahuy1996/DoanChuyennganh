@@ -1,7 +1,115 @@
-﻿@model List<string>
-    <select >
-        @foreach (string s in Model)
-        {
-            <option>@s</option>
-        }
-    </select>
+﻿@using WebApplication1.Models.EF;
+@model List<monhoc> 
+@{
+    ViewBag.Title = "XemMonHoc";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+
+@if (Session["ErrorMess"] != null)
+{
+    if (string.Compare(Session["ErrorMess"].ToString(), "Success!") == 0)
+    {
+        <div class="alert alert-success">@Session["ErrorMess"]</div>
+        Session["ErrorMess"] = null;
+    }
+    else
+    {
+        <div class="alert alert-danger">@Session["ErrorMess"]</div>
+        Session["ErrorMess"] = null;
+    }
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="page-header">Thông Tin Môn Học</h1>
+                <a href="@Url.Action("ThemMonHoc","PDT")" class="btn btn-success">Thêm</a>
+
+            </div>
+           
+
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                    <thead>
+                        <tr>
+                            <th>Mã môn học</th>
+                           <th>Tên môn học</th>
+                            <th>Số tín chỉ</th>
+                            <th>Mã khoa</th>
+                            <th>Thao Tác</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (monhoc mh in Model)
+                        {
+                            
+
+                            <tr class="odd gradeX">
+
+                                <td class="center">@mh.mamh</td>
+                               <td class="center">@mh.tenmh</td>
+                                <td class="center">@mh.sotc</td>
+                                <td class="center">@mh.makhoa</td>
+                                <td class="center">
+                                    <a class="btn btn-danger" id="Delete" href="@Url.Action("XoaMonHoc","PDT",new {ma = @mh.mamh })" >Xoá</a>
+                                    <a class="btn btn-warning"href="@Url.Action("SuaMonHoc","PDT",new {ma = @mh.mamh })" > Sửa</a>
+                                </td>
+
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+                <!-- /.table-responsive -->
+
+               
+
+                @if (Session["ThongBao"] != null)
+                {
+                    if (string.Compare(Session["ThongBao"].ToString(), "Thêm thành công") == 0)
+                    {
+                        <script language="javascript">
+                                alert("Thêm thành công!!!!");
+                        </script>
+                    }
+                    if (string.Compare(Session["ThongBao"].ToString(), "Xoá Thành Công") == 0)
+                    {
+                        <script language="javascript">
+                                alert("Xoá thành công!!!!");
+                        </script>
+                    }
+                    if (string.Compare(Session["ThongBao"].ToString(), "Xoá Không Thành Công") == 0)
+                    {
+                        <script language="javascript">
+                                alert("Xoá Không Thành Công!!!!");
+                        </script>
+                    }
+                    if (string.Compare(Session["ThongBao"].ToString(), "Sửa Thành Công") == 0)
+                    {
+                        <script language="javascript">
+                                alert("Sửa Thành Công!!!!");
+                        </script>
+                    }
+
+                    Session["ThongBao"] = null;
+
+                }
+
+
+
+
+
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+
+

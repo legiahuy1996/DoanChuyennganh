@@ -405,9 +405,11 @@
     <Content Include="Views\PDT\success.cshtml" />
     <Content Include="Views\PDT\Uploadfile.cshtml" />
     <Content Include="Views\PDT\Xemdiem.cshtml" />
-    <Content Include="Views\PDT\xemmonhoc.cshtml" />
     <Content Include="Views\PDT\Nhom.cshtml" />
     <Content Include="Views\PDT\Login.cshtml" />
+    <Content Include="Views\PDT\XemMonHoc.cshtml" />
+    <Content Include="Views\PDT\SuaMonHoc.cshtml" />
+    <Content Include="Views\PDT\ThemMonHoc.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

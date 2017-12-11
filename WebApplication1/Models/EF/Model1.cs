@@ -105,6 +105,10 @@ namespace WebApplication1.Models.EF
                 .IsUnicode(false);
 
             modelBuilder.Entity<PDT>()
+                .Property(e => e.sdt)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<PDT>()
                 .Property(e => e.matkhau)
                 .IsUnicode(false);
 
