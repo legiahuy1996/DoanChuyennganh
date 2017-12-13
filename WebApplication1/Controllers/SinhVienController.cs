@@ -92,7 +92,7 @@ namespace WebApplication1.Controllers
                 if (newpass != newpass1)
                 {
                     ViewBag.ThongBao = "Nhập lại mật khẩu mới chưa đúng!!";
-                    RedirectToAction("xemthongtin", mssv);
+                   return RedirectToAction("xemthongtin", mssv);
                 }
                 else
                 {

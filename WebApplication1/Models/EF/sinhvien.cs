@@ -14,6 +14,7 @@ namespace WebApplication1.Models.EF
         public string mssv { get; set; }
 
         [Column(TypeName = "date")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? ngaysinh { get; set; }
 
         [StringLength(50)]

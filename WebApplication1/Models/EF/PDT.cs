@@ -28,5 +28,8 @@ namespace WebApplication1.Models.EF
 
         [StringLength(50)]
         public string matkhau { get; set; }
+
+        [StringLength(50)]
+        public string hoten { get; set; }
     }
 }

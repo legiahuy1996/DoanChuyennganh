@@ -25,7 +25,7 @@ namespace WebApplication1.Controllers
                 return View(list);
             }
         }
-        #region Login
+        #region Login,LogOut
         [HttpGet]
         public ActionResult Login()
         {
@@ -143,22 +143,54 @@ namespace WebApplication1.Controllers
             return View(sv);
         }
         [HttpPost]
-        public ActionResult EditSV(sinhvien sv, string gioitinh, string ngaysinh)
+        public ActionResult EditSV(string ma,string hoten,string diachi,string sdt, string gioitinh, string ngaysinh,string lop,string email,string madk,string makhoa)
         {
-            sinhvien svcu = SinhvienDAO.Instance.GetSVByMSSV(sv.mssv);
-            if (ngaysinh != "")
-                svcu.ngaysinh = DateTime.Parse(ngaysinh);
-            if (gioitinh != null)
-            {
-                if (gioitinh == "Nam")
-                    svcu.gioitinh = true;
-                else
-                    svcu.gioitinh = false;
-            }
-            SinhvienDAO.Instance.Edit(svcu);
-            Session["ThongBao"] = "Sửa Thành Công";
-            return RedirectToAction("Index", "PDT");
+            
+            string checkhoten = hoten.Replace(" ", "");
+            string checkdiachi = diachi.Replace(" ", "");
+            string checklop = lop.Replace(" ", "");
+            string checkemail = email.Replace(" ", "");
+            string checkmadk = madk.Replace(" ", "");
+            string checkmakhoa = makhoa.Replace(" ", "");
+            
 
+
+            //Kiểm tra rỗng
+            if (checkhoten.Length == 0 || checkdiachi.Length==0 || checklop.Length == 0 || checkemail.Length == 0 || checkmadk.Length == 0 || checkmakhoa.Length == 0) 
+            {
+                Session["ErrorMess"] = "Không được để trống thông tin";
+                return RedirectToAction("EditSV",new { mssv= ma });
+            }
+           else if((db.dkmonhocs.SingleOrDefault(x=>x.madk == madk))==null)
+            {
+                Session["ErrorMess"] = "Mã dk ko tồn tại!";
+                return RedirectToAction("EditSV", new { mssv = ma });
+            }
+
+            else if ((db.khoas.SingleOrDefault(x => x.makhoa == makhoa)) == null)
+            {
+                Session["ErrorMess"] = "Mã khoa ko tồn tại!";
+                return RedirectToAction("EditSV", new { mssv = ma });
+            }
+
+            else
+            {
+                sinhvien sinhvien = new sinhvien();
+                sinhvien.mssv = ma;
+                sinhvien.hoten = hoten;
+                sinhvien.email = email;
+                sinhvien.diachi = diachi;
+                sinhvien.lop = lop;
+                sinhvien.madk = madk;
+                sinhvien.makhoa = makhoa;
+                sinhvien.ngaysinh = DateTime.Parse(ngaysinh);
+                sinhvien.sdt = sdt;
+                sinhvien.gioitinh = bool.Parse(gioitinh);
+                SinhvienDAO.Instance.Edit(sinhvien);
+                Session["ErrorMess"] = "Success!";
+                return RedirectToAction("Index");
+            }
+    
 
 
         }
@@ -214,7 +246,7 @@ namespace WebApplication1.Controllers
 
             if (FileUpload == null || FileUpload.ContentLength == 0)
             {
-                Session["ErrorMess"] = "Please select a excel file<br>";
+                Session["ErrorMess"] = "Please select a excel file";
                 return RedirectToAction("Score", "PDT");
             }
             else
@@ -254,7 +286,7 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    Session["ErrorMess"] = "File type is incorrect<br>";
+                    Session["ErrorMess"] = "File type is incorrect!";
                     return RedirectToAction("Score", "PDT");
                 }
             }
@@ -394,7 +426,82 @@ namespace WebApplication1.Controllers
 
         #endregion
 
+        #region Thông tin tài khoản
+        [HttpGet]
+        public ActionResult TaiKhoan()
+        {
+            if (Session["taikhoanadmin"] == null)
+                return RedirectToAction("Login", "PDT");
+            else
+            {
+                PDT nhanvien = PDTdao.Instance.getNhanVienByID(Session["MSNV"].ToString());
+                return View(nhanvien);
+            }
+           
 
+        }
+        [HttpPost]
+        public ActionResult SuaTaiKhoan(string ma, string hoten, string email,string sdt)
+        {
+            string checkten = hoten.Replace(" ", "");
+            string checkemail = email.Replace(" ", "");
+            string checksdt = sdt.Replace(" ", "");
+            int a = int.Parse(sdt);// Kiểm tra dấu của sdt
+            
+
+            if (checkten.Length >0 && checkemail.Length >0 && checksdt.Length >=10 && a > 0 )
+            {
+              
+               
+                    Session["ErrorMess"] = "Success!";
+                    PDTdao.Instance.Sua(ma, hoten, email, sdt);
+                return RedirectToAction("Index");
+               
+            }
+           
+            else
+            {
+                Session["ErrorMess"] = "Fail!";
+                return RedirectToAction("TaiKhoan");
+            }
+           
+
+        }
+        [HttpGet]
+        public ActionResult DoiMatKhau(string ma)
+        {
+            PDT nv = PDTdao.Instance.getNhanVienByID(ma);
+            return View(nv);
+        }
+        [HttpPost]
+        public ActionResult DoiMatKhau(string ma,string oldpassword, string newpassword, string newpasswordAgain)
+        {
+           if(newpassword == newpasswordAgain)
+            {
+                var kq = PDTdao.Instance.doimatkhau(ma,oldpassword,newpassword);
+                if(kq)
+                {
+                    Session["ErrorMess"] = "Success!";
+                    return RedirectToAction("Index");
+                }
+                Session["ErrorMess"] = "Mật khẩu cũ không đúng!";
+                return RedirectToAction("DoiMatKhau", new { ma });
+            }
+           else
+            {
+                Session["ErrorMess"] = "Nhập lại mật khẩu chưa đúng!";
+                return RedirectToAction("DoiMatKhau", new { ma });
+            }
+           
+        }
+        public ActionResult DangXuat()
+        {
+            Session["taikhoanadmin"] = null;
+            Session["MSNV"] = null;
+            Session["PASS"] = null;
+            return RedirectToAction("Index", "PDT");
+        }
+        #endregion
 
 
 

@@ -36,5 +36,28 @@ namespace WebApplication1.Models.DAO
             var result = db.PDTs.SingleOrDefault(x => x.msnv == id);
             return result;
         }
+        public void Sua(string ma, string hoten, string email, string sdt)
+        {
+            PDT nv = getNhanVienByID(ma);
+            nv.hoten = hoten;
+            nv.email = email;
+            nv.sdt = sdt;
+           
+            db.SaveChanges();
+        }
+        public bool doimatkhau(string ma,string oldpassword,string newpassword)
+        {
+
+            PDT nv = db.PDTs.SingleOrDefault(x => x.msnv == ma && x.matkhau == Encryptor.MD5Hash(oldpassword));
+            if (nv == null)
+                return false;
+            else
+            {
+                nv.matkhau = Encryptor.MD5Hash(newpassword);
+                db.SaveChanges();
+                return true;
+            }
+
+        }
     }
 }

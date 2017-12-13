@@ -5,95 +5,114 @@
     Layout = "~/Views/Shared/LayoutAdmin.cshtml";
 }
 
-<h2>EditSV</h2>
 
-@using (Html.BeginForm("EditSV","PDT",FormMethod.Post))
+@if (Session["ErrorMess"] != null)
 {
-    @Html.AntiForgeryToken()
-    <div class="form-horizontal">
-        <h4>sinhvien</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.mssv)
-        <div class="form-group">
-            @Html.LabelFor(model => model.hoten, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.hoten, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.hoten, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.ngaysinh, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-               <input type="date"   name="ngaysinh" class="form-control" value="@Model.ngaysinh"/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.diachi, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.diachi, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.diachi, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.gioitinh, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    
-                    <input type="radio" name="gioitinh" value="Nam" checked="checked"  />Nam
-                    <input type="radio" name="gioitinh" value="Nữ" />Nữ
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.sdt, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.sdt, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.sdt, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-               @Html.EditorFor(model=>model.email, new { htmlAttributes = new { @class = "form-control",@type = "email" } } )
-            </div>
-        </div>
-
-       
-
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.lop, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.lop, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.lop, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.makhoa, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.makhoa, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.makhoa, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Edit" class="btn btn-default" onclick="Sua()" />
-            </div>
-        </div>
-    </div>
-    
+    if (string.Compare(Session["ErrorMess"].ToString(), "Success!") == 0)
+    {
+        <div class="alert alert-success">@Session["ErrorMess"]</div>
+        Session["ErrorMess"] = null;
+    }
+    else
+    {
+        <div class="alert alert-danger">@Session["ErrorMess"]</div>
+        Session["ErrorMess"] = null;
+    }
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
+<h2>Sửa sinh viên</h2>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Thông tin môn học
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+
+                @using (Html.BeginForm("EditSV", "PDT", FormMethod.Post))
+                {
+                   
+                                <div class="form-group">
+                                    <input type="hidden" name="ma" value="@Model.mssv" />
+                                    <label>Họ tên sv</label>
+                                    <input name="hoten" class="form-control" value="@Model.hoten">
+                                </div>
+                                <div class="form-group">
+                                    <label>Giới tính</label>
+                                  @if(Model.gioitinh == true)
+                                  {
+                                      <div class="form-group">
+                                          <input type="radio" name="gioitinh" value="true" checked="checked" /><span>Nam</span>
+                                          <input type="radio" name="gioitinh" value="false" /><span>Nữ</span>
+                                      </div>
+
+
+                                  }
+                                  else
+                                  {
+                                    <div class="form-group">
+                                        <input type="radio" name="gioitinh" value="true"  /><span>Nam</span>
+                                        <input type="radio" name="gioitinh" value="false"checked="checked" /><span>Nữ</span>
+                                    </div>
+                                  }
+                                </div>
+                                <div class="form-group">
+                                    <label>Ngày Sinh</label>
+                                    <input type="text" name="ngaysinh" class="form-control" id="datepicker" readonly value="@Model.ngaysinh" />
+                                </div>
+                                <div class="form-group">
+                                    
+                                    <label>Địa chỉ</label>
+                                    <textarea class="form-control" rows="5" name="diachi" >@Model.diachi</textarea>
+                                </div>
+                                <div class="form-group">
+
+                                    <label>Số điện thoại</label>
+                                    <input type="number" name="sdt" class="form-control" value="@Model.sdt">
+                                </div>
+                                <div class="form-group">
+
+                                    <label>Email</label>
+                                    <input type="email" name="email" class="form-control" value="@Model.email">
+                                </div>
+                                <div class="form-group">
+                                    <label>Lớp</label>
+                                    <input type="text" class="form-control" name="lop" value="@Model.lop" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Mã đăng ký môn học</label>
+                                    <input type="text" class="form-control" name="madk" value="@Model.madk" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Mã Khoa</label>
+                                    <input type="text" class="form-control" name="makhoa" value="@Model.makhoa" />
+                                </div>
+
+
+
+                                <button name="submit" type="submit" class="btn btn-warning">Sửa</button>
+                }
+                <br />
+                <div>
+                    <a href="@Url.Action("Index","PDT")" class="btn btn-primary">Back to list</a>
+                </div>
+
+
+
+
+
+
+            </div>
+            <!-- /.col-lg-6 (nested) -->
+            <!-- /.col-lg-6 (nested) -->
+        </div>
+        <!-- /.row (nested) -->
+    </div>
+    <!-- /.panel-body -->
 </div>
+<!-- /.panel -->
+<!-- /#page-wrapper -->
+
+
