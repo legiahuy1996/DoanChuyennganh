@@ -163,6 +163,7 @@
     </Compile>
     <Compile Include="Models\DAO\ChiTietdkDAO.cs" />
     <Compile Include="Models\DAO\DiemDAO.cs" />
+    <Compile Include="Models\DAO\DiemSinhVien.cs" />
     <Compile Include="Models\DAO\DkmonhocDAO.cs" />
     <Compile Include="Models\DAO\Encryptor.cs" />
     <Compile Include="Models\DAO\hockyDAO.cs" />
@@ -498,7 +499,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\SinhVien\dangnhap.cshtml" />
     <Content Include="Views\SinhVien\xemtatcadiem.cshtml" />
-    <Content Include="Views\SinhVien\xemthongtin.cshtml" />
     <Content Include="Views\Shared\Layout.cshtml" />
     <Content Include="Views\Shared\LayoutAdmin.cshtml" />
     <Content Include="Views\PDT\EditSV.cshtml" />
@@ -515,6 +515,7 @@
     <Content Include="Views\PDT\ThemMonHoc.cshtml" />
     <Content Include="Views\PDT\TaiKhoan.cshtml" />
     <Content Include="Views\PDT\DoiMatKhau.cshtml" />
+    <Content Include="Views\SinhVien\xemthongtin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -37,76 +37,72 @@ namespace WebApplication1.Controllers
 
             }
 
-            public ViewResult xemtatcadiem(string MSSV)
+        public ViewResult xemtatcadiem(string MSSV)
+        {
+            var result = from a in db.diems
+                         join b in db.chitietdks on a.madiem equals b.madiem
+                         join c in db.dkmonhocs on b.madk equals c.madk
+                         join d in db.sinhviens on c.madk equals d.madk
+                         join e in db.nhoms on b.manhom equals e.manhom
+                         join f in db.monhocs on e.mamh equals f.mamh
+                         join g in db.hockies on c.madk equals g.madk
+                         where d.mssv == MSSV
+                         select new DiemSinhVien
+                         {
+                             Namhoc = g.nam,
+                             Hocky = g.hocky1,
+                             Mamh = f.mamh,
+                             Tenmh = f.tenmh,
+                             Diemqt = a.diemQT,
+                             Diemgk = a.diemGK,
+                             Diemck = a.diemCK,
+                             Solanthi = a.solanthi,
+                             Tongdiem = a.tongdiem
+
+                         };
+            sinhvien sv = db.sinhviens.SingleOrDefault(x => x.mssv == MSSV);
+            ViewBag.SinhVien = sv;
+            List<DiemSinhVien> lst = new List<DiemSinhVien>();
+            lst = result.ToList();
+            return View(lst);
+        }
+
+        public PartialViewResult xemthongtin(string MSSV)
+        {
+            sinhvien sv = SinhvienDAO.Instance.GetSVByMSSV(MSSV);
+            return PartialView(sv);
+
+        }
+
+        public ActionResult Dangxuat()
+        {
+            Session["taikhoan"] = null;
+            return RedirectToAction("dangnhap");
+        }
+        public ActionResult doimatkhau(string oldpass, string newpass, string newpass1, string mssv)
+        {
+
+            sinhvien kiemtra = db.sinhviens.SingleOrDefault(x => x.mssv == mssv && x.matkhau == oldpass);
+            if (newpass != newpass1)
             {
-
-                sinhvien sv = SinhvienDAO.Instance.GetSVByMSSV(MSSV);
-                dkmonhoc dkmonhoc = DkmonhocDAO.Instance.GetDkmonhocbyID(sv.madk);
-                List<chitietdk> lstchitiet = ChiTietdkDAO.Instance.GetListChitietdkByIDdk(dkmonhoc.madk);
-                List<diem> lstdiem = new List<diem>();
-                foreach (chitietdk chitiet in lstchitiet)
+                ViewBag.ThongBao = "Nhập lại mật khẩu mới chưa đúng!!";
+                return RedirectToAction("xemthongtin", mssv);
+            }
+            else
+            {
+                if (kiemtra != null)
                 {
-                    diem diem = new diem();
-                    diem = DiemDAO.Instance.GetDiemByID(chitiet.madiem);
-                    lstdiem.Add(diem);
-
+                    kiemtra.matkhau = newpass;
+                    db.SaveChanges();
+                    return RedirectToAction("Index", "Home", mssv );
                 }
-                ViewBag.Diem = lstdiem;
-                return View(sv);
+              return RedirectToAction("xemthongtin", mssv);
+
             }
 
-            public ActionResult xemthongtin(string MSSV)
-            {
-                var taikhoan = Session["taikhoan"];
-                var mssv = Session["MSSV"];
-                sinhvien sv = new sinhvien();
-                if (MSSV == null)
-                {
-                    return HttpNotFound("Page's not found");
 
 
-                }
-                if (string.Compare(mssv.ToString(), MSSV) == 1 || taikhoan == null)
-                {
-                    return HttpNotFound("Sorry you have to login!");
-
-
-                }
-                else
-                {
-                    sv = SinhvienDAO.Instance.GetSVByMSSV(MSSV);
-                    return View(sv);
-                }
-
-            }
-
-            public ActionResult Dangxuat()
-            {
-                Session["taikhoan"] = null;
-                return RedirectToAction("dangnhap");
-            }
-            public ActionResult doimatkhau(string oldpass, string newpass, string newpass1, string mssv)
-            {
-
-                sinhvien kiemtra = db.sinhviens.SingleOrDefault(x => x.mssv == mssv && x.matkhau == oldpass);
-                if (newpass != newpass1)
-                {
-                    ViewBag.ThongBao = "Nhập lại mật khẩu mới chưa đúng!!";
-                   return RedirectToAction("xemthongtin", mssv);
-                }
-                else
-                {
-                    if (kiemtra != null)
-                    {
-                        kiemtra.matkhau = newpass;
-                        db.SaveChanges();
-                    }
-
-                }
-
-
-
-                return RedirectToAction("Index", "Home", new { mssv = mssv });
-            }
+            
         }
     }
+}

@@ -6,10 +6,10 @@
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 @section menu{
-    <tr id="menutable">
-        <td style="color:white">@Ajax.ActionLink("Bảng điểm", "Index", "Home", new { mssv = Model.mssv }, new AjaxOptions { HttpMethod = "POST" })</td>
-        <td style="color:white">@Ajax.ActionLink("Xem Thông Tin", "xemthongtin", "SinhVien", new { mssv = Model.mssv }, new AjaxOptions { HttpMethod = "POST" })</td>
-        <td style="color:white" colspan="2"><a href="@Url.Action("Dangxuat","SinhVien")">Đăng xuất </a></td>
+    <tr id="menutable" >
+        <td style="color:white"><a href="@Url.Action("Index","Home",new {mssv = Model.mssv })" class="btn btn-primary">Bảng Điểm</a></td>
+        <td style="color:white">@Ajax.ActionLink("Xem Thông Tin", "xemthongtin", "SinhVien", new { mssv = Model.mssv }, new AjaxOptions { HttpMethod = "POST",InsertionMode=InsertionMode.Replace,UpdateTargetId="result" }, new { @class = "btn btn-primary" })</td>
+        <td style="color:white" colspan="2"><a href="@Url.Action("Dangxuat","SinhVien")" class="btn btn-primary" >Đăng xuất </a></td>
 
 
 
@@ -81,11 +81,13 @@
         </tr>
         <tr>
             <td>
-                @Ajax.ActionLink("Xem Điểm", "xemtatcadiem", "SinhVien", new { mssv = @Model.mssv }, new AjaxOptions { HttpMethod = "POST" }, new { @id = "btnXemDiem" })
+                <a href="@Url.Action("xemtatcadiem","SinhVien",new { MSSV = Model.mssv })" class="center-block btn btn-primary">Xem điểm</a>    
             </td>
         </tr>
     </tbody>
+    
 </table>
+
 <style>
     #btnXemDiem {
         text-decoration: none;

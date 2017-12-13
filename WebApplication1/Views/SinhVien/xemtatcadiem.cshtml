@@ -1,15 +1,16 @@
 ﻿@using WebApplication1.Models.DAO;
 @using WebApplication1.Models.EF;
-@model sinhvien
+@model List<DiemSinhVien>
 @{
     ViewBag.Title = "xemtatcadiem";
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 @section menu{
+  @{ sinhvien sv1 = ViewBag.SinhVien;}
     <tr id="menutable">
-        <td style="color:white">@Ajax.ActionLink("Bảng điểm", "Index", "Home", new { mssv = Model.mssv }, new AjaxOptions { HttpMethod = "POST" })</td>
-        <td style="color:white">@Ajax.ActionLink("Xem Thông Tin", "xemthongtin", "SinhVien", new { mssv = Model.mssv }, new AjaxOptions { HttpMethod = "POST" })</td>
-        <td style="color:white" colspan="2"><a href="@Url.Action("Dangxuat","SinhVien")">Đăng xuất </a></td>
+        <td style="color:white"><a href="@Url.Action("Index","Home",new {mssv = sv1.mssv })" class="btn btn-primary">Bảng Điểm</a></td>
+        <td style="color:white">@Ajax.ActionLink("Xem Thông Tin", "xemthongtin", "SinhVien", new { mssv = sv1.mssv }, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "result" }, new { @class = "btn btn-primary" })</td>
+        <td style="color:white" colspan="2"><a href="@Url.Action("Dangxuat","SinhVien")" class="btn btn-primary">Đăng xuất </a></td>
 
     </tr>
 
@@ -59,6 +60,7 @@
     </thead>
 
 }
+@{ sinhvien sv = ViewBag.SinhVien;}
 <table align="center" border="0" cellspacing="0" cellpadding="3">
     <tbody>
         <tr>
@@ -66,40 +68,41 @@
         </tr>
         <tr>
             <td>MSSV</td>
-            <td>:@Model.mssv</td>
+            <td>:@sv.mssv</td>
         </tr>
         <tr>
             <td>Họ tên</td>
-            <td>:@Model.hoten</td>
+            <td>:@sv.hoten</td>
         </tr>
         <tr>
             <td>Lớp</td>
-            <td>:@Model.lop</td>
+            <td>:@sv.lop</td>
         </tr>
         <tr></tr>
     </tbody>
 </table>
 @section table{
 
-    @foreach (diem diem in ViewBag.Diem)
+    @foreach (DiemSinhVien diem in Model)
     {
-        monhoc mh = MonHocDao.Instance.getmonhocbyID(diem.mamh);
+
+       
 
         <tr style="text-align:center">
-            <td>@diem.mahk</td>
-            <td>@diem.mamh</td>
-            <td>@mh.tenmh</td>
+            <td>@diem.Namhoc - @diem.Hocky</td>
+            <td>@diem.Mamh</td>
+            <td>@diem.Tenmh</td>
 
 
 
-            <td>@diem.diemQT</td>
-            <td>@diem.diemGK</td>
-            <td>@diem.diemCK</td>
+            <td>@diem.Diemqt</td>
+            <td>@diem.Diemgk</td>
+            <td>@diem.Diemck</td>
 
 
 
-            <td>@diem.solanthi</td>
-            <td>@diem.tongdiem</td>
+            <td>@diem.Solanthi</td>
+            <td>@diem.Tongdiem</td>
 
 
 
