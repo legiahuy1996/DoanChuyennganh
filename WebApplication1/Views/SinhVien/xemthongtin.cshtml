@@ -8,7 +8,7 @@
 @section menu{
     <tr id="menutable">
         <td style="color:white"><a href="@Url.Action("Index","Home",new {mssv = Model.mssv })" class="btn btn-primary">Bảng Điểm</a></td>
-        <td style="color:white">@Ajax.ActionLink("Xem Thông Tin", "xemthongtin", "SinhVien", new { mssv = Model.mssv }, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "result" }, new { @class = "btn btn-primary" })</td>
+        <td style="color:white"><a href="@Url.Action("xemthongtin","SinhVien",new {mssv = Model.mssv })" class="btn btn-primary"> Xem Thông Tin</a></td>
         <td style="color:white" colspan="2"><a href="@Url.Action("Dangxuat","SinhVien")" class="btn btn-primary">Đăng xuất </a></td>
 
     </tr>
@@ -48,31 +48,32 @@
                             <tr>
                                 <td colspan="2" align="center"><button type="submit">Đổi mật khẩu</button></td>
                             </tr>
+
+
+
+
+                            <tr>
+                                <td colspan="2" align="center" style="color:#666666;"><span id="status" style="display: none;"></span></td>
+                            </tr>
+                            <tr><td colspan="2">&nbsp;</td></tr>
+                            <tr>
+                                <th colspan="2">THAY ĐỔI EMAIL</th>
+                            </tr>
+                            <tr>
+                                <td>Email hiện hành:</td>
+                                <td><b style="color:green">@Model.email</b></td>
+                            </tr>
+                            <tr>
+                                <td>Email mới:</td>
+                                <td><input id="email" name="newemail" maxlength="50"><br></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center"><input type="submit" id="submit1" value="Thay đổi email"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center" style="color:#666666;"><span id="status1" style="display: none;"></span></td>
+                            </tr>
                         }
-
-
-
-                        <tr>
-                            <td colspan="2" align="center" style="color:#666666;"><span id="status" style="display: none;"></span></td>
-                        </tr>
-                        <tr><td colspan="2">&nbsp;</td></tr>
-                        <tr>
-                            <th colspan="2">THAY ĐỔI EMAIL</th>
-                        </tr>
-                        <tr>
-                            <td>Email hiện hành:</td>
-                            <td><b style="color:green"><span id="email_hienhanh">@Model.email</span></b><input type="hidden" id="oldemail" value="legiahuy1996@outlook.com"></td>
-                        </tr>
-                        <tr>
-                            <td>Email mới:</td>
-                            <td><input id="email" maxlength="50"><br><span id="email_err" class="err" style="display: none;"></span></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" align="center"><input type="button" id="submit1" value="Thay đổi email"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" align="center" style="color:#666666;"><span id="status1" style="display: none;"></span></td>
-                        </tr>
                     </tbody>
 
 

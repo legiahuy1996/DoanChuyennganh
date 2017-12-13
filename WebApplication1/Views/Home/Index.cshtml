@@ -8,7 +8,7 @@
 @section menu{
     <tr id="menutable" >
         <td style="color:white"><a href="@Url.Action("Index","Home",new {mssv = Model.mssv })" class="btn btn-primary">Bảng Điểm</a></td>
-        <td style="color:white">@Ajax.ActionLink("Xem Thông Tin", "xemthongtin", "SinhVien", new { mssv = Model.mssv }, new AjaxOptions { HttpMethod = "POST",InsertionMode=InsertionMode.Replace,UpdateTargetId="result" }, new { @class = "btn btn-primary" })</td>
+        <td style="color:white"><a href="@Url.Action("xemthongtin","SinhVien",new {mssv = Model.mssv })" class="btn btn-primary"> Xem Thông Tin</a></td>
         <td style="color:white" colspan="2"><a href="@Url.Action("Dangxuat","SinhVien")" class="btn btn-primary" >Đăng xuất </a></td>
 
 

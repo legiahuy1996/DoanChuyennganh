@@ -29,8 +29,8 @@ namespace WebApplication1.Models.DAO
         }
         public sinhvien GetSVByMSSV(string mssv)
         {
-           var result = db.sinhviens.SingleOrDefault(x => x.mssv == mssv);
-           return result;
+           
+           return db.sinhviens.SingleOrDefault(x => x.mssv == mssv); 
 
         }
         public List<sinhvien> GetListSV()

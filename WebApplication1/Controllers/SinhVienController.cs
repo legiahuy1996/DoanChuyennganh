@@ -67,10 +67,10 @@ namespace WebApplication1.Controllers
             return View(lst);
         }
 
-        public PartialViewResult xemthongtin(string MSSV)
+        public ActionResult xemthongtin(string MSSV)
         {
-            sinhvien sv = SinhvienDAO.Instance.GetSVByMSSV(MSSV);
-            return PartialView(sv);
+            sinhvien sv = db.sinhviens.SingleOrDefault(x=>x.mssv == MSSV);
+            return View(sv);
 
         }
 
@@ -79,24 +79,53 @@ namespace WebApplication1.Controllers
             Session["taikhoan"] = null;
             return RedirectToAction("dangnhap");
         }
-        public ActionResult doimatkhau(string oldpass, string newpass, string newpass1, string mssv)
+        public ActionResult doimatkhau(string oldpass, string newpass, string newpass1, string mssv,string oldemail,string newemail)
         {
 
-            sinhvien kiemtra = db.sinhviens.SingleOrDefault(x => x.mssv == mssv && x.matkhau == oldpass);
+            sinhvien kiemtra = db.sinhviens.SingleOrDefault(x => x.mssv == mssv);
+            
             if (newpass != newpass1)
             {
                 ViewBag.ThongBao = "Nhập lại mật khẩu mới chưa đúng!!";
-                return RedirectToAction("xemthongtin", mssv);
+                return RedirectToAction("xemthongtin", new { mssv });
+            }
+            else if(kiemtra.matkhau != oldpass)
+            {
+                ViewBag.ThongBao = " mật khẩu chưa đúng!!";
+                return RedirectToAction("xemthongtin", new { mssv });
             }
             else
             {
                 if (kiemtra != null)
                 {
-                    kiemtra.matkhau = newpass;
-                    db.SaveChanges();
-                    return RedirectToAction("Index", "Home", mssv );
+                    string checkemail = newemail.Replace(" ", "");
+                    string checknewpass = newpass.Replace(" ", "");
+                    if (checkemail.Length > 0 )
+                    {
+                        if (checknewpass.Length > 0)
+                        {
+                            kiemtra.matkhau = newpass;
+                            kiemtra.email = newemail;
+                            db.SaveChanges();
+                            return RedirectToAction("Index", "Home", new { mssv });
+                        }
+                        kiemtra.email = newemail;
+                        db.SaveChanges();
+                        return RedirectToAction("Index", "Home", new { mssv });
+                    }
+                    else if(checknewpass.Length > 0)
+                    {
+                        kiemtra.matkhau = newpass;
+                        db.SaveChanges();
+                        return RedirectToAction("Index", "Home", new { mssv });
+                    }
+                    return RedirectToAction("xemthongtin", new { mssv });
+                   
+
+
+
                 }
-              return RedirectToAction("xemthongtin", mssv);
+              return RedirectToAction("xemthongtin", new { mssv });
 
             }
 

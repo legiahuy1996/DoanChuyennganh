@@ -19,18 +19,7 @@ namespace WebApplication1.Controllers
             else
             {
                 sinhvien sv = SinhvienDAO.Instance.GetSVByMSSV(mssv);
-                dkmonhoc dkmonhoc = DkmonhocDAO.Instance.GetDkmonhocbyID(sv.madk);
-                List<chitietdk> lstchitiet = ChiTietdkDAO.Instance.GetListChitietdkByIDdk(dkmonhoc.madk);
-                List<diem> lstdiem = new List<diem>();
-                foreach (chitietdk chitiet in lstchitiet)
-                {
-                    diem diem = new diem();
-                    diem = DiemDAO.Instance.GetDiemByID(chitiet.madiem);
-                    lstdiem.Add(diem);
-
-                }
-                ViewBag.Diem = lstdiem;
-
+                
 
 
 
