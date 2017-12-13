@@ -8,6 +8,7 @@ using WebApplication1.Models.EF;
 using System.IO;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace WebApplication1.Controllers
 {
@@ -25,7 +26,7 @@ namespace WebApplication1.Controllers
                 return View(list);
             }
         }
-        #region Login,LogOut
+        #region Login
         [HttpGet]
         public ActionResult Login()
         {
@@ -51,6 +52,7 @@ namespace WebApplication1.Controllers
             }
 
         }
+        
         #endregion
         #region Bảng SV
         [HttpPost]
@@ -103,7 +105,7 @@ namespace WebApplication1.Controllers
                         }
 
                     }
-                    application.Workbooks.Close();
+                    application.Quit();
                     var lst = db.diems.ToList();
                     Session["ErrorMess"] = "Success!";
                     return RedirectToAction("Index", "PDT");
@@ -118,6 +120,80 @@ namespace WebApplication1.Controllers
                 }
             }
         }
+      
+        public ActionResult ExportSV()
+        {
+            List<sinhvien> lst = new List<sinhvien>();
+            lst = db.sinhviens.ToList();
+            Excel.Application application = new Excel.Application();
+            Excel.Workbook workbook = application.Workbooks.Add(System.Reflection.Missing.Value);
+            Excel.Worksheet worksheet = workbook.ActiveSheet;
+            worksheet.Cells[1, 1] = "MSSV";
+            worksheet.Cells[1, 2] = "Họ Tên";
+            worksheet.Cells[1, 3] = "Giới tính";
+            worksheet.Cells[1, 4] = "Ngày Sinh";
+            worksheet.Cells[1, 5] = "Số điện thoại";
+            worksheet.Cells[1, 6] = "Địa chỉ";
+            worksheet.Cells[1, 7] = "Email";
+            worksheet.Cells[1, 8] = "Lớp";
+            worksheet.Cells[1, 9] = "Mã Khoa";
+            worksheet.Cells[1, 10] = "Mã đăng ký môn học";
+            int row = 2;
+            foreach(sinhvien sv in lst)
+            {
+                worksheet.Cells[row, 1] = sv.mssv;
+                worksheet.Cells[row, 2] = sv.hoten;
+                if(sv.gioitinh == true)
+                {
+                    worksheet.Cells[row, 3] = "Nam";
+                }
+                else
+                {
+                    worksheet.Cells[row, 3] = "Nữ";
+                }
+                if(sv.ngaysinh!=null)
+                {
+                    DateTime dt = DateTime.ParseExact(sv.ngaysinh.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+
+                    string s = dt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    worksheet.Cells[row, 4] = s;
+                }
+                else
+                {
+                    worksheet.Cells[row, 4] = sv.ngaysinh;
+                }
+               
+                worksheet.Cells[row, 5] = sv.sdt;
+                worksheet.Cells[row, 6] = sv.diachi;
+                worksheet.Cells[row, 7] = sv.email;
+                worksheet.Cells[row, 8] = sv.lop;
+                worksheet.Cells[row, 9] = sv.makhoa;
+                worksheet.Cells[row, 10] = sv.madk;
+                row++;
+            }
+            worksheet.get_Range("A1", "K1").EntireColumn.AutoFit();
+            //Format Heading
+            var range_Heading = worksheet.get_Range("A1", "J1");
+            range_Heading.Font.Bold = true;
+            range_Heading.Font.Color = System.Drawing.Color.Red;
+            range_Heading.Font.Size = 13;
+
+            //Format date
+            //var range_date = worksheet.get_Range("D2","D"+(lst.Count+1));
+            //range_date.NumberFormat("mm/dd/yyyy");
+         
+            workbook.SaveAs("d:\\DanhSachSV.xls");
+            workbook.Close();
+            Marshal.ReleaseComObject(workbook);
+
+            application.Quit();
+            Marshal.FinalReleaseComObject(application);
+
+
+            Session["ErrorMess"] = "Success!";
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
         public ActionResult DeleteSV(string mssv)
         {
             var result = SinhvienDAO.Instance.Delete(mssv);
