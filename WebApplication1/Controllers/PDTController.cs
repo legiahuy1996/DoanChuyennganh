@@ -9,6 +9,7 @@ using System.IO;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using ExcelLibrary.SpreadSheet;
 
 namespace WebApplication1.Controllers
 {
@@ -59,6 +60,7 @@ namespace WebApplication1.Controllers
         public ActionResult UploadFileSinhvien(HttpPostedFileBase FileUpload)
         {
 
+
             if (FileUpload == null || FileUpload.ContentLength == 0)
             {
                 Session["ErrorMess"] = "Please select a excel file<br>";
@@ -68,7 +70,7 @@ namespace WebApplication1.Controllers
             {
                 if (FileUpload.FileName.EndsWith("xls") || (FileUpload.FileName.EndsWith("xlsx")))
                 {
-                    string location = Server.MapPath("~/Content/" + FileUpload.FileName);
+                    string location = Server.MapPath("~/FileExcel/" + FileUpload.FileName);
                     if (System.IO.File.Exists(location))
                         System.IO.File.Delete(location);
                     FileUpload.SaveAs(location);
@@ -123,6 +125,7 @@ namespace WebApplication1.Controllers
       
         public ActionResult ExportSV()
         {
+            #region code chạy local được nhưng không chạy trên server dc
             List<sinhvien> lst = new List<sinhvien>();
             lst = db.sinhviens.ToList();
             Excel.Application application = new Excel.Application();
@@ -139,11 +142,11 @@ namespace WebApplication1.Controllers
             worksheet.Cells[1, 9] = "Mã Khoa";
             worksheet.Cells[1, 10] = "Mã đăng ký môn học";
             int row = 2;
-            foreach(sinhvien sv in lst)
+            foreach (sinhvien sv in lst)
             {
                 worksheet.Cells[row, 1] = sv.mssv;
                 worksheet.Cells[row, 2] = sv.hoten;
-                if(sv.gioitinh == true)
+                if (sv.gioitinh == true)
                 {
                     worksheet.Cells[row, 3] = "Nam";
                 }
@@ -151,7 +154,7 @@ namespace WebApplication1.Controllers
                 {
                     worksheet.Cells[row, 3] = "Nữ";
                 }
-                if(sv.ngaysinh!=null)
+                if (sv.ngaysinh != null)
                 {
                     DateTime dt = DateTime.ParseExact(sv.ngaysinh.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
 
@@ -162,7 +165,7 @@ namespace WebApplication1.Controllers
                 {
                     worksheet.Cells[row, 4] = sv.ngaysinh;
                 }
-               
+
                 worksheet.Cells[row, 5] = sv.sdt;
                 worksheet.Cells[row, 6] = sv.diachi;
                 worksheet.Cells[row, 7] = sv.email;
@@ -181,19 +184,80 @@ namespace WebApplication1.Controllers
             //Format date
             //var range_date = worksheet.get_Range("D2","D"+(lst.Count+1));
             //range_date.NumberFormat("mm/dd/yyyy");
-         
+
             workbook.SaveAs("d:\\DanhSachSV.xls");
             workbook.Close();
             Marshal.ReleaseComObject(workbook);
 
             application.Quit();
             Marshal.FinalReleaseComObject(application);
+            #endregion
+            #region 1 cách export khác đã thử nhưng vẫn ko chạy dc trên server
+            ////create new xls file
+            //string file = "d:\\newdoc.xls";
+            //List<sinhvien> lst = new List<sinhvien>();
+            //lst = db.sinhviens.ToList();
+            //Workbook workbook = new Workbook();
+            //Worksheet worksheet = new Worksheet("First Sheet");
+            //worksheet.Cells[1, 1] = new Cell("MSSV");
+            //worksheet.Cells[1, 2] = new Cell("Họ Tên");
+            //worksheet.Cells[1, 3] = new Cell("Giới tính");
+            //worksheet.Cells[1, 4] = new Cell("Ngày Sinh");
+            //worksheet.Cells[1, 5] = new Cell("Số điện thoại");
+            //worksheet.Cells[1, 6] = new Cell("Địa chỉ");
+            //worksheet.Cells[1, 7] = new Cell("Email");
+            //worksheet.Cells[1, 8] = new Cell("Lớp");
+            //worksheet.Cells[1, 9] = new Cell("Mã Khoa");
+            //worksheet.Cells[1, 10] = new Cell("Mã đăng ký môn học");
+            //int row = 2;
+            //foreach (sinhvien sv in lst)
+            //{
+            //    worksheet.Cells[row, 1] = new Cell(sv.mssv);
+            //    worksheet.Cells[row, 2] = new Cell(sv.hoten);
+            //    if (sv.gioitinh == true)
+            //    {
+            //        worksheet.Cells[row, 3] = new Cell("Nam");
+            //    }
+            //    else
+            //    {
+            //        worksheet.Cells[row, 3] = new Cell("Nữ");
+            //    }
+            //    if (sv.ngaysinh != null)
+            //    {
+            //        DateTime dt = DateTime.ParseExact(sv.ngaysinh.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
 
+            //        string s = dt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+            //        worksheet.Cells[row, 4] = new Cell(s);
+            //    }
+            //    else
+            //    {
+            //        worksheet.Cells[row, 4] = new Cell(sv.ngaysinh);
+            //    }
+
+            //    worksheet.Cells[row, 5] = new Cell(sv.sdt);
+            //    worksheet.Cells[row, 6] = new Cell(sv.diachi);
+            //    worksheet.Cells[row, 7] = new Cell(sv.email);
+            //    worksheet.Cells[row, 8] = new Cell(sv.lop);
+            //    worksheet.Cells[row, 9] = new Cell(sv.makhoa);
+            //    worksheet.Cells[row, 10] = new Cell(sv.madk);
+            //    row++;
+            //}
+
+
+
+            //workbook.Worksheets.Add(worksheet);
+            //workbook.Save(file);
+
+            ////// open xls file 
+            ////Workbook book = Workbook.Load(file);
+            ////Worksheet sheet = book.Worksheets[0];
+
+            #endregion
 
             Session["ErrorMess"] = "Success!";
             return RedirectToAction("Index");
         }
-        [HttpPost]
+       
         public ActionResult DeleteSV(string mssv)
         {
             var result = SinhvienDAO.Instance.Delete(mssv);
