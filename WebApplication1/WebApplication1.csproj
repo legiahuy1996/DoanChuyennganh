@@ -526,6 +526,8 @@
     <Content Include="Views\PDT\DoiMatKhau.cshtml" />
     <Content Include="Views\SinhVien\xemthongtin.cshtml" />
     <Content Include="Views\SinhVien\QuenMatKhau.cshtml" />
+    <Content Include="Views\PDT\QuenMatKhau.cshtml" />
+    <Content Include="Views\PDT\LayMatKhau.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

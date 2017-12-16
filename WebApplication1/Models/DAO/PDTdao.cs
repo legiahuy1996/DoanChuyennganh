@@ -48,7 +48,7 @@ namespace WebApplication1.Models.DAO
         public bool doimatkhau(string ma,string oldpassword,string newpassword)
         {
 
-            PDT nv = db.PDTs.SingleOrDefault(x => x.msnv == ma && x.matkhau == Encryptor.MD5Hash(oldpassword));
+            PDT nv = db.PDTs.SingleOrDefault(x => x.msnv == ma && x.matkhau == oldpassword);
             if (nv == null)
                 return false;
             else

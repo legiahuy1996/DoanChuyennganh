@@ -31,7 +31,7 @@
                         <h3 class="panel-title">Please Sign In</h3>
                     </div>
                     <div class="panel-body">
-
+                      
                         @using (Html.BeginForm("Login", "PDT", FormMethod.Post))
                         {
                             <fieldset>
@@ -40,16 +40,28 @@
                                     @if (ViewBag.Error != null)
                                     {
                                         <div class="alert alert-danger">@ViewBag.Error</div>
+
+                                    }
+                                    
+                                    @if (Session["ErrorMess"] != null)
+                                    {
+                                        <div class="alert alert-danger">@Session["ErrorMess"]</div>
+                                        
                                     }
                                     <input class="form-control" style="width:330px" placeholder="Mã số nhân viên" name="msnv" type="text" autofocus required>
                                 </div>
                                 <div class="form-group">
                                     <input class="form-control" style="width:330px" placeholder="Mật khẩu" name="password" type="password" value="" required>
+
                                 </div>
+                               <div class="form-group">
+                                   <a href="@Url.Action("QuenMatKhau","PDT")">Quên mật khẩu</a><br />
+                               </div>
                                 <!-- Change this to a button or input when using this as a form -->
                                 <button type="submit" class="btn btn-lg btn-success btn-block">Login</button>
                             </fieldset>
                         }
+                        
 
                     </div>
                 </div>

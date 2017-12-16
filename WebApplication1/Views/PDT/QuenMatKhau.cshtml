@@ -1,0 +1,26 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>QuenMatKhau</title>
+</head>
+<body>
+    @using (Html.BeginForm("LayMatKhau", "PDT",FormMethod.Post))
+    {
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" name="email" />
+        </div>
+        <div class="form-group">
+            <button class="btn-primary" type="submit">Lấy lại mật khẩu</button>
+        </div>
+    }
+   
+</body>
+</html>

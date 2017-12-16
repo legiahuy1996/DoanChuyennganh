@@ -10,6 +10,8 @@ using Excel = Microsoft.Office.Interop.Excel;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using ExcelLibrary.SpreadSheet;
+using System.Text;
+using System.Net.Mail;
 
 namespace WebApplication1.Controllers
 {
@@ -53,7 +55,68 @@ namespace WebApplication1.Controllers
             }
 
         }
-        
+        //Tạo chuỗi ngẫu nhiên
+        private string RandomString(int size, bool lowerCase)
+        {
+            StringBuilder builder = new StringBuilder();
+            Random random = new Random();
+            char ch;
+            for (int i = 0; i < size; i++)
+            {
+                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+                builder.Append(ch);
+            }
+            if (lowerCase)
+                return builder.ToString().ToLower();
+            return builder.ToString();
+        }
+        //
+        [HttpGet]
+        public ActionResult QuenMatKhau()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult LayMatKhau(string email)
+        {
+            PDT nv = db.PDTs.SingleOrDefault(x => x.email == email);
+            if (nv == null)
+            {
+                Session["ErrorMess"] = "Email này không tồn tại!";
+                return RedirectToAction("Login", "PDT");
+            }
+            string newpass = RandomString(10, false);
+            nv.matkhau = Encryptor.MD5Hash(newpass);
+            db.SaveChanges();
+            StringBuilder Body = new StringBuilder();
+            //Tạo body mail
+            Body.Append("<table>");
+            Body.Append("<tr><td colspan='2'><h4>Lấy lại mật khẩu</h4></td></tr>");
+            Body.Append("<tr><td>Mật khẩu mới của bạn là:</td><td>" + newpass + "</td></tr>");
+            Body.Append("<tr><td>Vui lòng đăng nhập bằng tài khoản này để đổi lại mật khẩu</td></tr>");
+            Body.Append("</table>");
+            //
+
+            //Cài đặt mail
+            MailMessage mail = new MailMessage();
+            mail.To.Add(nv.email);
+            mail.From = new MailAddress("stucaolo180@gmail.com");
+            mail.Subject = "Trả lời về vấn đề quên mật khẩu của nhân viên";
+            mail.Body = Body.ToString();// phần thân của mail ở trên
+            mail.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.UseDefaultCredentials = true;
+            smtp.Credentials = new System.Net.NetworkCredential("stucaolo180@gmail.com", "Smile123");// tài khoản Gmail của bạn
+            smtp.EnableSsl = true;
+            smtp.Send(mail);
+            return View();
+
+
+            //
+        }
+
         #endregion
         #region Bảng SV
         [HttpPost]
@@ -618,7 +681,7 @@ namespace WebApplication1.Controllers
         {
            if(newpassword == newpasswordAgain)
             {
-                var kq = PDTdao.Instance.doimatkhau(ma,oldpassword,newpassword);
+                var kq = PDTdao.Instance.doimatkhau(ma,Encryptor.MD5Hash(oldpassword),newpassword);
                 if(kq)
                 {
                     Session["ErrorMess"] = "Success!";

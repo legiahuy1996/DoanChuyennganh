@@ -72,6 +72,7 @@ namespace WebApplication1.Controllers
             Body.Append("<table>");
             Body.Append("<tr><td colspan='2'><h4>Lấy lại mật khẩu</h4></td></tr>");
             Body.Append("<tr><td>Mật khẩu mới của bạn là:</td><td>"+newpass+"</td></tr>");
+            Body.Append("<tr><td>Vui lòng đăng nhập bằng tài khoản này để đổi lại mật khẩu</td></tr>");
             Body.Append("</table>");
             //
 
